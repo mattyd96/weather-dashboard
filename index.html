@@ -12,10 +12,50 @@
         <h1 class="title">Weather Forcast</h1>
     </header>
     <main>
-        <input type="text" name="city-search" id="city-search">
+        <section class="city-container">
+            <div class="search">
+                <input type="text" name="city-search" id="city-search">
+                <div class="recent-cities">
+                    <!-- most recent city buttons go here -->
+                </div>
+            </div>
+        </section>
+        <section class="current-weather">
+            <h2 id="city-name"></h2>
+            <div class="today-card">
+                <p></p>
+                <p class="date-today"></p>
+            </div>
+            <section class="today-info">
+                <p id="temp"></p>
+                <p id="wind"></p>
+                <p id="humidity"></p>
+                <p id="uv"></p>
+            </section>
+            <section class="weather-pic-container">
+                <img src="" alt="" class="weather-pic">
+            </section>
+        </section>
+        <section class="5day-forcast">
+            <!-- sample card -> will make in js later -->
+            <article class="card">
+                <h3 class="day">Tuesday</h3>
+                <p class="date">Dec 30</p>
+                <section class="day-card-pic">
+                    <img src="" alt="" class="weather-card-pic">
+                </section>
+                <section class="day-card-info">
+                    <p class="temp"></p>
+                    <p class="wind"></p>
+                    <p class="humidity"></p>
+                </section>
+            </article>
+        </section>
+        
     </main>
 
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB_PaTfBNe2_W_s2wYXm0J-8Z93qZkKQuM&libraries=places"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1.10.7/dayjs.min.js"></script>
     <script src="./assets/js/script.js"></script> 
 </body>
 </html>
