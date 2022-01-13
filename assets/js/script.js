@@ -12,10 +12,21 @@ const statusPic = document.querySelector('.weather-pic');
 //variables for 5-day forcast
 const forcast = document.querySelector('.forcast');
 
-//variables for city buttons
+//variables for search and city buttons
+const searchForm = document.querySelector('#search-form');
+const searchBtn = document.querySelector('#search-btn');
 const recentCities = document.querySelector('.recent-cities');
 
-const getWeather = (name, lat, lng) => {
+//variables to hold place information from google places api
+const options = {
+    types: ['(cities)']
+};
+const autocomplete = new google.maps.places.Autocomplete(input , options);
+let place;
+
+
+const getWeather = (name = place.name, lat = place.geometry.location.lat(), lng = place.geometry.location.lng()) => {
+    
     fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lng}&units=metric&exclude=minutely&appid=cf0f236d99f05f78766736970398dfe2`)
         .then(response => {
             if(response.ok) { 
@@ -40,26 +51,6 @@ const getWeather = (name, lat, lng) => {
 const apiFetchErrHandler = () => {
     //do something to show user here
 };
-
-
-
-const initialize = () => {
-    const options = {
-        types: ['(cities)']
-    };
-
-    
-    const autocomplete = new google.maps.places.Autocomplete(input , options);
-
-    autocomplete.addListener("place_changed", () => {
-        const place = autocomplete.getPlace();
-        const lat = place.geometry.location.lat();
-        const lng = place.geometry.location.lng();
-        console.log(place);
-        getWeather(place.name, lat, lng);
-    })
-}
-
 
 
 
@@ -119,6 +110,18 @@ const populateToday = (name, info) => {
 }
 
 //create cards and populate 5 day forcast
+/* <article class="card">
+    <h3 class="day"></h3>
+    <p class="date"></p>
+    <section class="day-card-pic">
+        <img src="" alt="" class="weather-card-pic">
+    </section>
+    <section class="day-card-info">
+        <p class="weather-desc"></p>
+        <p class="temp-max"></p>
+        <p class="temp-min"></p>
+    </section>
+</article> */
 const populateDaily = info => {
     let temp_min, temp_max, desc, date, icon;
     
@@ -196,11 +199,21 @@ const cityBtnClickHandler = event => {
     getWeather(target.innerText, target.dataset.lat, target.dataset.lng);
 }
 
+const searchHandler = event => {
+    event.preventDefault();
+    place = autocomplete.getPlace();
+    getWeather();
+}
+
 
 const init = () => {
     populateRecentCities();
-    google.maps.event.addDomListener(window, 'load', initialize);
+    //google.maps.event.addDomListener(window, 'load', initialize);
     recentCities.addEventListener('click', cityBtnClickHandler);
+    searchBtn.addEventListener('click', searchHandler);
+    autocomplete.addListener("place_changed", () => {
+        place = autocomplete.getPlace();
+    });
 }
 
 init();
