@@ -9,11 +9,14 @@ const humidityToday = document.querySelector('#humidity');
 const uvToday = document.querySelector('#uv');
 const statusPic = document.querySelector('.weather-pic');
 
+//variables for 5-day forcast
+const forcast = document.querySelector('.forcast');
+
 //variables for city buttons
 const recentCities = document.querySelector('.recent-cities');
 
 const getWeather = (name, lat, lng) => {
-    fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lng}&units=metric&appid=cf0f236d99f05f78766736970398dfe2`)
+    fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lng}&units=metric&exclude=minutely&appid=cf0f236d99f05f78766736970398dfe2`)
         .then(response => {
             if(response.ok) { 
                 return response.json()
@@ -57,7 +60,7 @@ const initialize = () => {
     })
 }
 
-google.maps.event.addDomListener(window, 'load', initialize);
+
 
 
 //saving to local storage
@@ -117,7 +120,62 @@ const populateToday = (name, info) => {
 
 //create cards and populate 5 day forcast
 const populateDaily = info => {
+    let temp_min, temp_max, desc, date, icon;
+    
+    for(let i = 0; i < 5; i++) {
+        //get info
+        temp_min = info[i].temp.min;
+        temp_max = info[i].temp.max;
+        desc = info[i].weather[0].description;
+        date = info[i].dt;
+        icon = info[i].weather[0].icon;
 
+        //create card
+        const card = document.createElement('article');
+        card.className = 'card';
+
+        //create header -> day of the week
+        const title = document.createElement('h3');
+        title.className = 'day';
+        title.innerText = dayjs.unix(date).format('dddd');
+
+        //create subtitle
+        const subTitle = document.createElement('p');
+        subTitle.className = 'date';
+        subTitle.innerText = dayjs.unix(date).format('MMM DD');
+
+        //create section to hold weather info icon
+        const picContainer = document.createElement('section');
+        picContainer.className = "weather-pic-container";
+
+        //create weather info icon
+        const pic = document.createElement('img');
+        pic.setAttribute('src', `http://openweathermap.org/img/wn/${icon}@2x.png`)
+        pic.setAttribute('alt', desc);
+        pic.className = "weather-pic";
+        
+
+        //create info container and elements
+        const infoCont = document.createElement('section');
+        const weatherDesc = document.createElement('p');
+        const tempMax = document.createElement('p');
+        const tempMin = document.createElement('p');
+        infoCont.className = "day-card-info";
+        weatherDesc.className = 'weather-desc';
+        tempMax.className = 'temp-max';
+        tempMin.className = 'temp-min';
+        weatherDesc.innerText = desc;
+        tempMax.innerText = temp_max;
+        tempMin.innerText = temp_min;
+
+        //append together and assemble card
+        picContainer.append(pic);
+        infoCont.append(weatherDesc, tempMax, tempMin);
+        card.append(title, subTitle, picContainer, infoCont);
+
+        //append entire card to parent div
+        forcast.append(card);
+    }
 }
 
 const populateRecentCities = () => {
@@ -125,7 +183,7 @@ const populateRecentCities = () => {
 
     cities.forEach(element => {
         const button = document.createElement('button');
-        button.dataset.lon = element.lon;
+        button.dataset.lat = element.lat;
         button.dataset.lng = element.lng;
         button.innerText = element.name;
 
@@ -133,4 +191,16 @@ const populateRecentCities = () => {
     })
 }
 
-populateRecentCities();
+const cityBtnClickHandler = event => {
+    const target = event.target;
+    getWeather(target.innerText, target.dataset.lat, target.dataset.lng);
+}
+
+
+const init = () => {
+    populateRecentCities();
+    google.maps.event.addDomListener(window, 'load', initialize);
+    recentCities.addEventListener('click', cityBtnClickHandler);
+}
+
+init();
