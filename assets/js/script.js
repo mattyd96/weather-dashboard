@@ -24,6 +24,9 @@ const options = {
 const autocomplete = new google.maps.places.Autocomplete(input , options);
 let place;
 
+//weather chart variables
+let weatherChart = null;
+
 
 const getWeather = (name = place.name, lat = place.geometry.location.lat(), lng = place.geometry.location.lng()) => {
     
@@ -40,6 +43,7 @@ const getWeather = (name = place.name, lat = place.geometry.location.lat(), lng 
             console.log(info);
             //populate with info
             populatePage(name, info);
+            createChart(info.hourly);
             //save city to local storage
             localStorageSave(name, lat, lng);
             //clear input
@@ -99,14 +103,17 @@ const populatePage = (name, info) => {
 
 //populate todays weather div
 const populateToday = (name, info) => {
+
     selectedCity.innerText = name;
     tempToday.innerText = info.temp;
     windToday.innerText = info.wind_speed + ' m/s';
     humidityToday.innerText = info.humidity + '%';
     uvToday.innerText = info.uvi;
 
-    statusPic.setAttribute('src', `http://openweathermap.org/img/wn/${info.weather[0].icon}@4x.png`);
+    statusPic.setAttribute('src', `http://openweathermap.org/img/wn/${info.weather[0].icon}@2x.png`);
     statusPic.setAttribute('alt', `${info.weather[0].description}`);
+
+    document.querySelector('.today-card').classList.remove('hidden');
 }
 
 //create cards and populate 5 day forcast
@@ -124,6 +131,7 @@ const populateToday = (name, info) => {
 </article> */
 const populateDaily = info => {
     let temp_min, temp_max, desc, date, icon;
+    const fragment = new DocumentFragment();
     
     for(let i = 0; i < 5; i++) {
         //get info
@@ -177,8 +185,10 @@ const populateDaily = info => {
         card.append(title, subTitle, picContainer, infoCont);
 
         //append entire card to parent div
-        forcast.append(card);
+        fragment.append(card);
     }
+    forcast.innerHTML = "";
+    forcast.append(fragment);
 }
 
 const populateRecentCities = () => {
@@ -202,7 +212,7 @@ const cityBtnClickHandler = event => {
 const searchHandler = event => {
     event.preventDefault();
     place = autocomplete.getPlace();
-    getWeather();
+    if(place) {getWeather();}
 }
 
 
@@ -217,3 +227,54 @@ const init = () => {
 }
 
 init();
+
+
+const createChart = dataInputArr => {
+    const labels = createChartLabels(dataInputArr);
+    const dataset = createChartDataSet(dataInputArr);
+    const data = {
+        labels: labels,
+        datasets: [dataset],
+    };
+    const config = {
+        type: 'line',
+        data: data,
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+        },
+    };
+
+    if(weatherChart) { weatherChart.destroy(); }
+
+    weatherChart = new Chart(
+        document.getElementById('weather-chart'),
+        config
+    );
+}
+
+const createChartLabels = dataInputArr => {
+    let labels = [];
+    dataInputArr.forEach(hour => {
+        labels.push(dayjs.unix(hour.dt).format('HH'));
+    });
+
+    return labels;
+};
+
+const createChartDataSet = dataInputArr => {
+    let data = [];
+    dataInputArr.forEach(hour => {
+        data.push(hour.temp);
+    });
+
+    const dataset = {
+        label: 'Degrees',
+        backgroundColor: 'rgb(255, 99, 132)',
+        borderColor: 'rgb(255, 99, 132)',
+        fill: true,
+        data: data,
+    };
+
+    return dataset;
+};

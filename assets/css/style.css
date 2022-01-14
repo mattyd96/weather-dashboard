@@ -1,3 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap');
+* {
+    font-family: 'Rubik', sans-serif;
+}
+
 main {
     display: grid;
+    grid-template-columns: 1fr 3fr;
+    width: 98vw;
+}
+
+/* search section styling */
+.search, .recent-cities {
+    display: flex;
+    flex-direction: column;
+    max-width: 20rem;
+}
+
+.search {
+    grid-column: 1/2;
+    gap: .5rem;
+}
+
+.search > button {
+    padding: .5rem;
+}
+
+.search > input {
+    padding: .5rem;
+}
+
+.current-weather {
+    grid-column: 2/3;
+    display: flex;
+    gap: 4rem;
+    max-height: 25rem;
+}
+
+.chart {
+    flex-grow: 1;
+}
+
+.current-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.info_item {
+    display: flex;
+    justify-content: space-between;
+}
+
+.forcast {
+    grid-column: 2/3;
+    display: flex;
+    justify-content: space-between;
+}
+
+
+.hidden {
+    display: none;
 }

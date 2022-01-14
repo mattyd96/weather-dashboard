@@ -12,6 +12,8 @@
         <h1 class="title">Weather Forcast</h1>
     </header>
     <main>
+        
+        <!-- Search Section -->
         <section class="city-container">
             <div class="search">
                 <input type="text" name="city-search" id="city-search">
@@ -21,22 +23,44 @@
                 </div>
             </div>
         </section>
+
+        <!-- Current Weather section -->
         <section class="current-weather">
-            <h2 id="city-name"></h2>
-            <div class="today-card">
-                <p></p>
+            <!-- Current Weather Card -->
+            <article class="today-card hidden">
+                <section class="current-header">
+                    <h2 id="city-name"></h2>
+                    <img src="" alt="" class="weather-pic">
+                </section>
                 <p class="date-today"></p>
-            </div>
-            <section class="today-info">
-                <p id="temp"></p>
-                <p id="wind"></p>
-                <p id="humidity"></p>
-                <p id="uv"></p>
+                <section class="today-info">
+                    <div class="info_item">
+                        <p>Temp:</p>
+                        <p id="temp"></p>
+                    </div>
+                    <div class="info_item">
+                        <p>Windspeed:</p>
+                        <p id="wind"></p>
+                    </div>
+                    <div class="info_item">
+                        <p>Humidity:</p>
+                        <p id="humidity"></p>
+                    </div>
+                    <div class="info_item">
+                        <p>UV:</p>
+                        <p id="uv"></p>
+                    </div>
+                </section> 
+            </article>
+
+            <!-- Chart -->
+            <section class="chart">
+                <canvas id="weather-chart"></canvas>
             </section>
-            <section class="weather-pic-container">
-                <img src="" alt="" class="weather-pic">
-            </section>
+               
         </section>
+
+        <!-- Forcast Section -->
         <section class="forcast">
             <!-- cards inserted with js -->
         </section>   
@@ -44,6 +68,7 @@
 
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB_PaTfBNe2_W_s2wYXm0J-8Z93qZkKQuM&libraries=places"></script>
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1.10.7/dayjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
     <script src="./assets/js/script.js"></script> 
 </body>
 </html>
