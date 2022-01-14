@@ -4,26 +4,27 @@
 }
 
 main {
-    display: grid;
-    grid-template-columns: 1fr 3fr;
+    display: flex;
+    flex-direction: column;
     gap: 2rem;
 }
 
 /* search section styling */
 .city-container, .recent-cities, .search {
     display: flex;
-    flex-direction: column;
-    max-width: 20rem;
 }
 
 .city-container {
-    grid-column: 1/2;
-    gap: 1rem;
-    min-width: 0;
+    gap: 2rem;
+}
+
+.recent-cities {
+    gap: .5rem;
 }
 
 .search > button {
-    padding: .5rem;
+    padding: .5rem 2rem;
+    margin-left: 1rem;
 }
 
 .search > input {
@@ -33,17 +34,17 @@ main {
 
 /* Today weather section */
 .current-weather {
-    grid-column: 2/3;
     display: flex;
-    gap: 4rem;
+    gap: 2rem;
     max-height: 25rem;
     min-width: 0;
 }
 
 .chart {
     flex-grow: 1;
-    flex-shrink: 2;
+    flex-shrink: 1;
     min-width: 0;
+    box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
 }
 
 #weather-chart {
@@ -51,10 +52,22 @@ main {
     height: 100%;
 }
 
+.today-card {
+    min-width: 15rem;
+    flex-grow: 1;
+    flex-shrink: 1;
+    padding: 0 2rem;
+    box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+}
+
 .current-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.current-header > img {
+    margin-right: -1.8rem;
 }
 .info_item {
     display: flex;
@@ -64,7 +77,6 @@ main {
 
 /* forcast section */
 .forcast {
-    grid-column: 1/3;
     display: flex;
     flex-wrap: wrap;
     gap: 2rem;
@@ -104,17 +116,4 @@ main {
 
 
 @media (max-width: 930px) {
-    main {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .city-container, .recent-cities {
-        flex-direction: row;
-    }
-
-    .recent-cities {
-        gap: .5rem;
-    }
-
 }

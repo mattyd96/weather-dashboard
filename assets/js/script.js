@@ -46,6 +46,8 @@ const getWeather = (name = place.name, lat = place.geometry.location.lat(), lng 
             createChart(info.hourly);
             //save city to local storage
             localStorageSave(name, lat, lng);
+            //reorder recent cities
+            populateRecentCities();
             //clear input
             input.value = "";
 
@@ -223,10 +225,16 @@ const searchHandler = event => {
     if(place) {getWeather();}
 }
 
+//Initialize page based on what user had searched last
+const pageInitialize = () => {
+    const cities = localStorageGet();
+    if(cities.length) {
+        getWeather(cities[0].name, cities[0].lat, cities[0].lng);
+    }
+};
 
 const init = () => {
-    populateRecentCities();
-    //google.maps.event.addDomListener(window, 'load', initialize);
+    pageInitialize();
     recentCities.addEventListener('click', cityBtnClickHandler);
     searchBtn.addEventListener('click', searchHandler);
     autocomplete.addListener("place_changed", () => {
@@ -234,9 +242,10 @@ const init = () => {
     });
 }
 
-init();
+window.addEventListener('load', init);
 
 
+//chart code
 const createChart = dataInputArr => {
     const labels = createChartLabels(dataInputArr);
     const dataset = createChartDataSet(dataInputArr);
@@ -264,7 +273,7 @@ const createChart = dataInputArr => {
 const createChartLabels = dataInputArr => {
     let labels = [];
     dataInputArr.forEach(hour => {
-        labels.push(dayjs.unix(hour.dt).format('HH'));
+        labels.push(dayjs.unix(hour.dt).format('dd,h a'));
     });
 
     return labels;
