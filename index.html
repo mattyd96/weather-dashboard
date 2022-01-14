@@ -12,15 +12,15 @@
         <h1 class="title">Weather Forcast</h1>
     </header>
     <main>
-        
+
         <!-- Search Section -->
         <section class="city-container">
             <div class="search">
                 <input type="text" name="city-search" id="city-search">
                 <button id="search-btn">Search</button>
-                <div class="recent-cities">
-                    <!-- most recent city buttons go here -->
-                </div>
+            </div>
+            <div class="recent-cities">
+                <!-- most recent city buttons go here -->
             </div>
         </section>
 
@@ -29,10 +29,13 @@
             <!-- Current Weather Card -->
             <article class="today-card hidden">
                 <section class="current-header">
-                    <h2 id="city-name"></h2>
+                    <div class="title-date-container">
+                        <h2 id="city-name"></h2>
+                        <p id="date-today"></p>
+                    </div>
                     <img src="" alt="" class="weather-pic">
                 </section>
-                <p class="date-today"></p>
+                
                 <section class="today-info">
                     <div class="info_item">
                         <p>Temp:</p>

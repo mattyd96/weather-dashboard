@@ -105,6 +105,7 @@ const populatePage = (name, info) => {
 const populateToday = (name, info) => {
 
     selectedCity.innerText = name;
+    dateToday.innerText = dayjs.unix(info.dt).format('MMMM DD');
     tempToday.innerText = info.temp;
     windToday.innerText = info.wind_speed + ' m/s';
     humidityToday.innerText = info.humidity + '%';
@@ -118,9 +119,11 @@ const populateToday = (name, info) => {
 
 //create cards and populate 5 day forcast
 /* <article class="card">
-    <h3 class="day"></h3>
-    <p class="date"></p>
-    <section class="day-card-pic">
+    <section class="card-title-container">
+        <h3 class="day"></h3>
+        <p class="date"></p>
+    </section>
+    <section class="day-pic-container">
         <img src="" alt="" class="weather-card-pic">
     </section>
     <section class="day-card-info">
@@ -145,6 +148,10 @@ const populateDaily = info => {
         const card = document.createElement('article');
         card.className = 'card';
 
+        //create header container
+        const titleContainer = document.createElement('section');
+        titleContainer.className = 'card-title-container';
+
         //create header -> day of the week
         const title = document.createElement('h3');
         title.className = 'day';
@@ -157,11 +164,11 @@ const populateDaily = info => {
 
         //create section to hold weather info icon
         const picContainer = document.createElement('section');
-        picContainer.className = "weather-pic-container";
+        picContainer.className = "day-pic-container";
 
         //create weather info icon
         const pic = document.createElement('img');
-        pic.setAttribute('src', `http://openweathermap.org/img/wn/${icon}@2x.png`)
+        pic.setAttribute('src', `http://openweathermap.org/img/wn/${icon}@4x.png`)
         pic.setAttribute('alt', desc);
         pic.className = "weather-pic";
         
@@ -175,14 +182,15 @@ const populateDaily = info => {
         weatherDesc.className = 'weather-desc';
         tempMax.className = 'temp-max';
         tempMin.className = 'temp-min';
-        weatherDesc.innerText = desc;
-        tempMax.innerText = temp_max;
-        tempMin.innerText = temp_min;
+        weatherDesc.innerHTML = `<span>Cond:</span><span>${desc}</span>`;
+        tempMax.innerHTML = `<span>High:</span><span>${temp_max}&#8451;</span>`;
+        tempMin.innerHTML = `<span>Low:</span><span>${temp_min}&#8451;</span>`;
 
         //append together and assemble card
         picContainer.append(pic);
         infoCont.append(weatherDesc, tempMax, tempMin);
-        card.append(title, subTitle, picContainer, infoCont);
+        titleContainer.append(title, subTitle);
+        card.append(titleContainer, picContainer, infoCont);
 
         //append entire card to parent div
         fragment.append(card);
@@ -278,3 +286,11 @@ const createChartDataSet = dataInputArr => {
 
     return dataset;
 };
+
+function beforePrintHandler () {
+    for (var id in Chart.instances) {
+      Chart.instances[id].resize();
+    }
+}
+
+window.addEventListener('resize', beforePrintHandler);
