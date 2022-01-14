@@ -203,6 +203,7 @@ const populateDaily = info => {
 
 const populateRecentCities = () => {
     const cities = localStorageGet();
+    const fragment = new DocumentFragment();
 
     cities.forEach(element => {
         const button = document.createElement('button');
@@ -210,8 +211,10 @@ const populateRecentCities = () => {
         button.dataset.lng = element.lng;
         button.innerText = element.name;
 
-        recentCities.append(button);
-    })
+        fragment.append(button);
+    });
+
+    recentCities.replaceChildren(fragment);
 }
 
 const cityBtnClickHandler = event => {
