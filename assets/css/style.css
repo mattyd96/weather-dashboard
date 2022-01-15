@@ -20,7 +20,7 @@
     --background-color: var(--bg-color-light);
     --card-color: var(--color-light);
     --txt-color: var(--txt-light);
-    --button-color: var(--color-light);
+    --button-color: lightgrey;
     --button-txt-color: var(--txt-light);
 }
 
@@ -121,6 +121,15 @@ button:hover {
 
 .search > input {
     padding: .5rem;
+}
+
+.new-user-msg {
+    align-self: start;
+    margin: 0;
+    padding: .5rem 1rem;
+    border-radius: .25rem;
+    font-weight: 500;
+    background-color: var(--button-hvr-bg);
 }
 
 

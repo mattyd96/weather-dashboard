@@ -1,4 +1,11 @@
-const input = document.getElementById('city-search'); //city search input
+//-------------------------------------------- Global Variables -------------------------------------//
+
+//search input
+const input = document.getElementById('city-search');
+
+//weather sections
+const weatherTodayCont = document.querySelector('.current-weather-container');
+const forcastCont = document.querySelector('.forcast-container');
 
 //variables for today's weather info
 const selectedCity = document.querySelector('#city-name');
@@ -23,9 +30,9 @@ const options = {
     types: ['(cities)']
 };
 const autocomplete = new google.maps.places.Autocomplete(input , options);
-let place;
+let place; // holds autocomplete.getPlace()
 
-//weather chart variables
+//weather chart variable -> holds chart object when created
 let weatherChart = null;
 
 //dark and light theme variables
@@ -33,6 +40,10 @@ const themeToggleBtn = document.querySelector('.dark-toggle > svg');
 const toggleIcon = document.querySelector('#toggleIcon');
 
 
+
+//-------------------------------------------- Page Population : putting data into page ------------------------------//
+
+//get weather from api and update page
 const getWeather = (name = place.name, lat = place.geometry.location.lat(), lng = place.geometry.location.lng()) => {
     
     fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lng}&units=metric&exclude=minutely&appid=cf0f236d99f05f78766736970398dfe2`)
@@ -45,7 +56,6 @@ const getWeather = (name = place.name, lat = place.geometry.location.lat(), lng 
             }
         })
         .then(info => {
-            console.log(info);
             //populate with info
             populatePage(name, info);
             createChart(info.hourly);
@@ -63,49 +73,27 @@ const apiFetchErrHandler = () => {
     //do something to show user here
 };
 
-
-
-//saving to local storage
-const localStorageSave = (city, lat_in, lng_in) => {
-
-    //get array of city objects
-    let cities = localStorageGet();
-    let newCity;
-
-    //see if city already exists
-    const exists = cities.findIndex(element => element.name == city);
-
-    if(exists >= 0) {
-        newCity = cities.splice(exists, 1)[0];
+//Initialize page based on what user had searched last
+const pageInitialize = () => {
+    //if user has saved data - populate page with most recent city
+    //else show message on page for user to search for one
+    const cities = localStorageGet();
+    if(cities.length) {
+        getWeather(cities[0].name, cities[0].lat, cities[0].lng);
     } else {
-        //create new object
-        newCity = {
-            name : city,
-            lat : lat_in,
-            lng : lng_in,
-        }
+       recentCities.innerHTML = '<p class="new-user-msg">Please Select A City!</p>';
+       weatherTodayCont.classList.add('hidden');
+       forcastCont.classList.add('hidden');
     }
+};
 
-    //add to front of array and only save most 10 recent cities
-    cities.unshift(newCity);
-    cities = cities.slice(0, 10);
-
-    //save to local storage
-    localStorage.setItem('cities', JSON.stringify(cities));
-}
-
-//fetching from local storage
-const localStorageGet = () => {
-    const data = localStorage.getItem('cities');
-
-    return data ? JSON.parse(data) : [];
-}
-
-
-
+//populate page with all information gained from the api call
 const populatePage = (name, info) => {
+    
     populateToday(name, info.current);
     populateDaily(info.daily);
+    weatherTodayCont.classList.remove('hidden');
+    forcastCont.classList.remove('hidden');
 }
 
 //populate todays weather div
@@ -126,6 +114,8 @@ const populateToday = (name, info) => {
 }
 
 //create cards and populate 5 day forcast
+//card html template
+
 /* <article class="card">
     <section class="card-title-container">
         <h3 class="day"></h3>
@@ -140,6 +130,7 @@ const populateToday = (name, info) => {
         <p class="temp-min"></p>
     </section>
 </article> */
+
 const populateDaily = info => {
     let temp_min, temp_max, desc, date, icon;
     const fragment = new DocumentFragment();
@@ -207,6 +198,7 @@ const populateDaily = info => {
     forcast.append(fragment);
 }
 
+//populate recent cities div with buttons to quickly search them
 const populateRecentCities = () => {
     const cities = localStorageGet();
     const fragment = new DocumentFragment();
@@ -223,25 +215,59 @@ const populateRecentCities = () => {
     recentCities.replaceChildren(fragment);
 }
 
+//searches for city weather from api when recent city button is clicked
 const cityBtnClickHandler = event => {
     const target = event.target;
     getWeather(target.innerText, target.dataset.lat, target.dataset.lng);
 }
 
+//updates current place object with google api when user presses search -> gets weather
 const searchHandler = event => {
     event.preventDefault();
     place = autocomplete.getPlace();
     if(place) {getWeather();}
 }
 
-//Initialize page based on what user had searched last
-const pageInitialize = () => {
-    const cities = localStorageGet();
-    if(cities.length) {
-        getWeather(cities[0].name, cities[0].lat, cities[0].lng);
-    }
-};
+//saving new city to local storage
+const localStorageSave = (city, lat_in, lng_in) => {
 
+    //get array of city objects
+    let cities = localStorageGet();
+    let newCity;
+
+    //see if city already exists
+    const exists = cities.findIndex(element => element.name == city);
+
+    if(exists >= 0) {
+        newCity = cities.splice(exists, 1)[0];
+    } else {
+        //create new object
+        newCity = {
+            name : city,
+            lat : lat_in,
+            lng : lng_in,
+        }
+    }
+
+    //add to front of array and only save most 10 recent cities
+    cities.unshift(newCity);
+    cities = cities.slice(0, 10);
+
+    //save to local storage
+    localStorage.setItem('cities', JSON.stringify(cities));
+}
+
+//fetching recent cities from local storage
+const localStorageGet = () => {
+    const data = localStorage.getItem('cities');
+
+    return data ? JSON.parse(data) : [];
+}
+
+
+//----------------------------------- Dark and Light theme setters ---------------------------------------- //
+
+//toggles them when user selects toggle button
 const toggleThemes = event => {
     let status = toggleIcon.dataset.status;
 
@@ -252,19 +278,25 @@ const toggleThemes = event => {
     }
 }
 
+//sets theme on startup depending on users last used theme
 const setTheme = () => {
     const status = localStorage.getItem('theme');
-    console.log(status);
 
     if(status) {
         status === 'dark' ? setThemeDark() : setThemeLight();
     }
 }
 
+//set dark theme
 const setThemeDark = () => {
+    //set local storage value for theme
     localStorage.setItem('theme', 'dark');
+
+    //change them toggle icon and status
     toggleIcon.setAttribute('xlink:href', '#sun');
     toggleIcon.dataset.status = 'dark';
+
+    //update css properties to apply theme to dom
     document.documentElement.style.setProperty('--background-color', 'var(--bg-color-dark)');
     document.documentElement.style.setProperty('--card-color', 'var(--color-dark)');
     document.documentElement.style.setProperty('--txt-color', 'var(--txt-dark)');
@@ -272,7 +304,7 @@ const setThemeDark = () => {
     document.documentElement.style.setProperty('--button-txt-color', 'var(--txt-dark)');
 
     
-
+    //update weather chart text
     if(weatherChart) {
         weatherChart.config.options.plugins.title.color = 'white';
         weatherChart.config.options.scales.x.ticks.color = 'white';
@@ -280,25 +312,26 @@ const setThemeDark = () => {
         weatherChart.config.options.scales.y.ticks.color = 'white';
 
         weatherChart.update();
-    }
-    
-
-    
+    }   
 }
 
+//set light theme
 const setThemeLight = () => {
+    //set local storage value for theme
     localStorage.setItem('theme', 'light');
+
+    //change them toggle icon and status
     toggleIcon.setAttribute('xlink:href', '#moon');
     toggleIcon.dataset.status = 'light';
 
+    //update css properties to apply theme to dom
     document.documentElement.style.setProperty('--background-color', 'var(--bg-color-light)');
     document.documentElement.style.setProperty('--card-color', 'var(--color-light)');
     document.documentElement.style.setProperty('--txt-color', 'var(--txt-light)');
     document.documentElement.style.setProperty('--button-color', 'lightgrey');
     document.documentElement.style.setProperty('--button-txt-color', 'var(--txt-light)');
 
-    
-
+    //update weather chart text
     if(weatherChart) {
         weatherChart.config.options.plugins.title.color = 'black';
         weatherChart.config.options.scales.x.ticks.color = 'black';
@@ -308,23 +341,15 @@ const setThemeLight = () => {
     }
 }
 
-const init = () => {
-    pageInitialize();
-    recentCities.addEventListener('click', cityBtnClickHandler);
-    searchBtn.addEventListener('click', searchHandler);
-    autocomplete.addListener("place_changed", () => {
-        place = autocomplete.getPlace();
-    });
-
-    themeToggleBtn.addEventListener('click', toggleThemes);
-    setTheme();
-}
-
-window.addEventListener('load', init);
 
 
-//chart code
+
+
+//------------------------------------- chart code : chart.js -------------------------------------------------------//
+
+//create chart : dataInputArr is hourly array from weather api
 const createChart = dataInputArr => {
+    //create all necessary components for chart
     const labels = createChartLabels(dataInputArr);
     const dataset = createChartDataSet(dataInputArr);
     const data = {
@@ -333,21 +358,27 @@ const createChart = dataInputArr => {
     };
     const config = createChartConfig(data);
 
+    //if a chart already exists, destroy it
     if(weatherChart) { weatherChart.destroy(); }
 
+    //create new chart
     weatherChart = new Chart(
         document.getElementById('weather-chart'),
         config
     );
 }
 
+//create config file for chart
 const createChartConfig = data => {
+
+    //change text color based on current theme
     const status = localStorage.getItem('theme');
     let color = 'black';
     if(status && status == 'dark') {
         color = 'white';
     }
 
+    //create config object
     let config = {
         type: 'line',
         data: data,
@@ -406,6 +437,7 @@ const createChartConfig = data => {
     return config;
 }
 
+//create labels array -> y axis : dataInputArr is hourly array from weather api
 const createChartLabels = dataInputArr => {
     let labels = [];
     dataInputArr.forEach(hour => {
@@ -415,6 +447,7 @@ const createChartLabels = dataInputArr => {
     return labels;
 };
 
+//create data array -> x axis : dataInputArr is hourly array from weather api
 const createChartDataSet = dataInputArr => {
     let data = [];
     dataInputArr.forEach(hour => {
@@ -432,10 +465,29 @@ const createChartDataSet = dataInputArr => {
     return dataset;
 };
 
+//handler function for resizing of page, will redraw chart to fit parent div
 function beforePrintHandler () {
     for (var id in Chart.instances) {
       Chart.instances[id].resize();
     }
 }
-
 window.addEventListener('resize', beforePrintHandler);
+
+
+//-------------------------------------- Initialize ------------------------------------------ //
+
+//Initialization Function
+const init = () => {
+    pageInitialize();
+    recentCities.addEventListener('click', cityBtnClickHandler);
+    searchBtn.addEventListener('click', searchHandler);
+    autocomplete.addListener("place_changed", () => {
+        place = autocomplete.getPlace();
+    });
+
+    themeToggleBtn.addEventListener('click', toggleThemes);
+    setTheme();
+}
+
+//Wait for window to load to initialize
+window.addEventListener('load', init);
