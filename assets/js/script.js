@@ -3,6 +3,7 @@ const input = document.getElementById('city-search'); //city search input
 //variables for today's weather info
 const selectedCity = document.querySelector('#city-name');
 const dateToday = document.querySelector('#date-today');
+const condToday = document.querySelector('#condition');
 const tempToday = document.querySelector('#temp');
 const windToday = document.querySelector('#wind');
 const humidityToday = document.querySelector('#humidity');
@@ -108,10 +109,11 @@ const populateToday = (name, info) => {
 
     selectedCity.innerText = name;
     dateToday.innerText = dayjs.unix(info.dt).format('MMMM DD');
-    tempToday.innerText = info.temp;
-    windToday.innerText = info.wind_speed + ' m/s';
-    humidityToday.innerText = info.humidity + '%';
-    uvToday.innerText = info.uvi;
+    condToday.innerHTML = `<span>Condition</span><span>${info.weather[0].description}</span>`;
+    tempToday.innerHTML = `<span>Temp</span><span>${info.temp}</span>`;
+    windToday.innerHTML = `<span>Wind</span><span>${info.wind_speed} m/s</span>`;
+    humidityToday.innerHTML = `<span>Humidity</span><span>${info.humidity} %</span>`;
+    uvToday.innerHTML = `<span>UV</span><span>${info.uvi} %</span>`;
 
     statusPic.setAttribute('src', `http://openweathermap.org/img/wn/${info.weather[0].icon}@2x.png`);
     statusPic.setAttribute('alt', `${info.weather[0].description}`);

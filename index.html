@@ -25,48 +25,45 @@
         </section>
 
         <!-- Current Weather section -->
-        <section class="current-weather">
-            <!-- Current Weather Card -->
-            <article class="today-card hidden">
-                <section class="current-header">
-                    <div class="title-date-container">
-                        <h2 id="city-name"></h2>
-                        <p id="date-today"></p>
-                    </div>
-                    <img src="" alt="" class="weather-pic">
-                </section>
-                
-                <section class="today-info">
-                    <div class="info_item">
-                        <p>Temp:</p>
+        <section class="current-weather-container">
+            <h2>Today</h2>
+            <section class="current-weather">
+                <!-- Current Weather Card -->
+                <article class="today-card hidden">
+                    <section class="current-header">
+                        <div class="title-date-container">
+                            <h2 id="city-name"></h2>
+                            <p id="date-today"></p>
+                        </div>
+                        <img src="" alt="" class="weather-pic">
+                    </section>
+                    
+                    <section class="today-info">
+                        <p id="condition"></p>
                         <p id="temp"></p>
-                    </div>
-                    <div class="info_item">
-                        <p>Windspeed:</p>
                         <p id="wind"></p>
-                    </div>
-                    <div class="info_item">
-                        <p>Humidity:</p>
                         <p id="humidity"></p>
-                    </div>
-                    <div class="info_item">
-                        <p>UV:</p>
                         <p id="uv"></p>
-                    </div>
-                </section> 
-            </article>
-
-            <!-- Chart -->
-            <section class="chart">
-                <canvas id="weather-chart"></canvas>
+                    </section> 
+                </article>
+    
+                <!-- Chart -->
+                <section class="chart">
+                    <canvas id="weather-chart"></canvas>
+                </section>
+                   
             </section>
-               
         </section>
+        
 
         <!-- Forcast Section -->
-        <section class="forcast">
-            <!-- cards inserted with js -->
-        </section>   
+        <section class="forcast-container">
+            <h2>5 Day Forcast</h2>
+            <section class="forcast">
+                <!-- cards inserted with js -->
+            </section>   
+        </section>
+        
     </main>
 
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB_PaTfBNe2_W_s2wYXm0J-8Z93qZkKQuM&libraries=places"></script>

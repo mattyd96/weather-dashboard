@@ -1,12 +1,49 @@
 @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap');
+
+:root {
+    /* layout */
+    --width: min(100%, 85rem);
+
+    /* colors */
+    --search-btn: ;
+    --button-hvr-bg: hsl(347, 100%, 69.4%);
+    --button-hvr-txt: white;
+}
+
+
+
+
 * {
     font-family: 'Rubik', sans-serif;
+}
+
+header {
+    width: var(--width);
+    margin: auto;
 }
 
 main {
     display: flex;
     flex-direction: column;
     gap: 2rem;
+    width: var(--width);
+    margin: auto;
+}
+
+button {
+    border: none;
+    border-radius: .25rem;
+    font-weight: 500;
+    padding: .5rem 1rem;
+}
+
+button:hover {
+    background-color: var(--button-hvr-bg);
+    color: var(--button-hvr-txt);
+}
+
+button:active {
+    margin: .25rem auto -.25rem auto;
 }
 
 /* search section styling */
@@ -20,6 +57,7 @@ main {
 
 .recent-cities {
     gap: .5rem;
+    flex-wrap: wrap;
 }
 
 .search > button {
@@ -54,8 +92,6 @@ main {
 
 .today-card {
     min-width: 15rem;
-    flex-grow: 1;
-    flex-shrink: 1;
     padding: 0 2rem;
     box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
 }
@@ -69,7 +105,7 @@ main {
 .current-header > img {
     margin-right: -1.8rem;
 }
-.info_item {
+.today-info > p {
     display: flex;
     justify-content: space-between;
 }
@@ -80,7 +116,7 @@ main {
     display: flex;
     flex-wrap: wrap;
     gap: 2rem;
-    margin-top: 4rem;
+    margin-top: 2rem;
 }
 
 .card {
@@ -114,6 +150,38 @@ main {
     display: none;
 }
 
+@media (max-width: 1000px) {
+    .search {
+        flex-direction: column;
+        gap: .5rem;
+    }
 
-@media (max-width: 930px) {
+    .search > button {
+        margin-left: 0;
+        min-width: 19rem;
+    }
+}
+
+
+@media (max-width:  700px) {
+
+    .city-container {
+        flex-direction: column;
+    }
+
+   
+
+    .recent-cities > button {
+        flex-basis: calc(49% );
+        padding: .5rem 0;
+    }
+
+    .current-weather {
+        flex-wrap: wrap;
+        max-height: none;
+    }
+
+    .today-card{
+        flex-basis: 100%;  
+    }
 }
