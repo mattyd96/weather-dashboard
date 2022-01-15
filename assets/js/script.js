@@ -28,6 +28,10 @@ let place;
 //weather chart variables
 let weatherChart = null;
 
+//dark and light theme variables
+const themeToggleBtn = document.querySelector('.dark-toggle > svg');
+const toggleIcon = document.querySelector('#toggleIcon');
+
 
 const getWeather = (name = place.name, lat = place.geometry.location.lat(), lng = place.geometry.location.lng()) => {
     
@@ -110,7 +114,7 @@ const populateToday = (name, info) => {
     selectedCity.innerText = name;
     dateToday.innerText = dayjs.unix(info.dt).format('MMMM DD');
     condToday.innerHTML = `<span>Condition</span><span>${info.weather[0].description}</span>`;
-    tempToday.innerHTML = `<span>Temp</span><span>${info.temp}</span>`;
+    tempToday.innerHTML = `<span>Temp</span><span>${info.temp}&#8451;</span>`;
     windToday.innerHTML = `<span>Wind</span><span>${info.wind_speed} m/s</span>`;
     humidityToday.innerHTML = `<span>Humidity</span><span>${info.humidity} %</span>`;
     uvToday.innerHTML = `<span>UV</span><span>${info.uvi} %</span>`;
@@ -150,11 +154,11 @@ const populateDaily = info => {
 
         //create card
         const card = document.createElement('article');
-        card.className = 'card';
+        card.className = 'day-card card';
 
         //create header container
         const titleContainer = document.createElement('section');
-        titleContainer.className = 'card-title-container';
+        titleContainer.className = 'day-card-title-container';
 
         //create header -> day of the week
         const title = document.createElement('h3');
@@ -238,6 +242,72 @@ const pageInitialize = () => {
     }
 };
 
+const toggleThemes = event => {
+    let status = toggleIcon.dataset.status;
+
+    if(status === 'light') {
+        setThemeDark();
+    } else {
+        setThemeLight();
+    }
+}
+
+const setTheme = () => {
+    const status = localStorage.getItem('theme');
+    console.log(status);
+
+    if(status) {
+        status === 'dark' ? setThemeDark() : setThemeLight();
+    }
+}
+
+const setThemeDark = () => {
+    localStorage.setItem('theme', 'dark');
+    toggleIcon.setAttribute('xlink:href', '#sun');
+    toggleIcon.dataset.status = 'dark';
+    document.documentElement.style.setProperty('--background-color', 'var(--bg-color-dark)');
+    document.documentElement.style.setProperty('--card-color', 'var(--color-dark)');
+    document.documentElement.style.setProperty('--txt-color', 'var(--txt-dark)');
+    document.documentElement.style.setProperty('--button-color', 'var(--color-dark)');
+    document.documentElement.style.setProperty('--button-txt-color', 'var(--txt-dark)');
+
+    
+
+    if(weatherChart) {
+        weatherChart.config.options.plugins.title.color = 'white';
+        weatherChart.config.options.scales.x.ticks.color = 'white';
+        weatherChart.config.options.scales.y.title.color = 'white';
+        weatherChart.config.options.scales.y.ticks.color = 'white';
+
+        weatherChart.update();
+    }
+    
+
+    
+}
+
+const setThemeLight = () => {
+    localStorage.setItem('theme', 'light');
+    toggleIcon.setAttribute('xlink:href', '#moon');
+    toggleIcon.dataset.status = 'light';
+
+    document.documentElement.style.setProperty('--background-color', 'var(--bg-color-light)');
+    document.documentElement.style.setProperty('--card-color', 'var(--color-light)');
+    document.documentElement.style.setProperty('--txt-color', 'var(--txt-light)');
+    document.documentElement.style.setProperty('--button-color', 'lightgrey');
+    document.documentElement.style.setProperty('--button-txt-color', 'var(--txt-light)');
+
+    
+
+    if(weatherChart) {
+        weatherChart.config.options.plugins.title.color = 'black';
+        weatherChart.config.options.scales.x.ticks.color = 'black';
+        weatherChart.config.options.scales.y.title.color = 'black';
+        weatherChart.config.options.scales.y.ticks.color = 'black';
+        weatherChart.update();
+    }
+}
+
 const init = () => {
     pageInitialize();
     recentCities.addEventListener('click', cityBtnClickHandler);
@@ -245,6 +315,9 @@ const init = () => {
     autocomplete.addListener("place_changed", () => {
         place = autocomplete.getPlace();
     });
+
+    themeToggleBtn.addEventListener('click', toggleThemes);
+    setTheme();
 }
 
 window.addEventListener('load', init);
@@ -258,14 +331,7 @@ const createChart = dataInputArr => {
         labels: labels,
         datasets: [dataset],
     };
-    const config = {
-        type: 'line',
-        data: data,
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-        },
-    };
+    const config = createChartConfig(data);
 
     if(weatherChart) { weatherChart.destroy(); }
 
@@ -275,10 +341,75 @@ const createChart = dataInputArr => {
     );
 }
 
+const createChartConfig = data => {
+    const status = localStorage.getItem('theme');
+    let color = 'black';
+    if(status && status == 'dark') {
+        color = 'white';
+    }
+
+    let config = {
+        type: 'line',
+        data: data,
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                title: {
+                    display: true,
+                    text: "Temp for Next 2 days",
+                    align: 'center',
+                    padding: {
+                        top: 5,
+                        bottom: 15
+                    },
+                    color: color,
+                    font: {
+                        size: '20',
+                    }
+                },
+                legend: {
+                    display: false,
+                },
+                
+            },
+            scales: {
+                x: {
+                    ticks: {
+                        color: color,
+                    font: {
+                        family: "'Rubik', 'sans-serif'",
+                        size: 14,
+                        weight: 'bold'
+                    }
+                  }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: '°C',
+                        color: color,
+                        font: {
+                            family: "'Rubik', 'sans-serif'",
+                            size: 16,
+                            weight: 'bold'
+                        }
+                    },
+                    ticks: {
+                        color: color,
+                    }
+                }
+            },
+        },
+    };
+
+    return config;
+}
+
 const createChartLabels = dataInputArr => {
     let labels = [];
     dataInputArr.forEach(hour => {
-        labels.push(dayjs.unix(hour.dt).format('dd,h a'));
+        labels.push(dayjs.unix(hour.dt).format('ddd h a'));
     });
 
     return labels;

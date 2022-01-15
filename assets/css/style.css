@@ -5,22 +5,57 @@
     --width: min(100%, 85rem);
 
     /* colors */
-    --search-btn: ;
     --button-hvr-bg: hsl(347, 100%, 69.4%);
     --button-hvr-txt: white;
+
+    --bg-color-light: white;
+    --bg-color-dark: hsl(222, 10%, 20%);
+
+    --color-light: white;
+    --color-dark: hsl(220, 10%, 28%);
+
+    --txt-dark: white;
+    --txt-light: black;
+
+    --background-color: var(--bg-color-light);
+    --card-color: var(--color-light);
+    --txt-color: var(--txt-light);
+    --button-color: var(--color-light);
+    --button-txt-color: var(--txt-light);
 }
-
-
-
 
 * {
     font-family: 'Rubik', sans-serif;
 }
 
+body {
+    background-color: var(--background-color);
+    color: var(--txt-color);
+}
+
 header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     width: var(--width);
     margin: auto;
 }
+
+.dark-toggle {
+    padding:0;
+    background-color: transparent;
+    color: var(--txt-color);
+}
+
+.dark-toggle > svg {
+    width: 2.5rem;
+}
+
+.dark-toggle:hover {
+    background-color:transparent;
+    color: var(--button-hvr-bg);
+}
+
 
 main {
     display: flex;
@@ -34,17 +69,31 @@ button {
     border: none;
     border-radius: .25rem;
     font-weight: 500;
+    color: var(--button-txt-color);
+    background-color: var(--button-color);
     padding: .5rem 1rem;
 }
 
 button:hover {
     background-color: var(--button-hvr-bg);
     color: var(--button-hvr-txt);
+    cursor: pointer;
 }
 
-button:active {
+.search > button:active {
     margin: .25rem auto -.25rem auto;
 }
+
+.card {
+    box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+    background-color: var(--card-color);
+}
+
+.card p {
+    display: flex;
+    justify-content: space-between;
+}
+
 
 /* search section styling */
 .city-container, .recent-cities, .search {
@@ -60,9 +109,14 @@ button:active {
     flex-wrap: wrap;
 }
 
+.search {
+    flex-direction: column;
+    gap: .5rem;
+}
+
 .search > button {
     padding: .5rem 2rem;
-    margin-left: 1rem;
+    min-width: 19rem;
 }
 
 .search > input {
@@ -83,6 +137,7 @@ button:active {
     flex-shrink: 1;
     min-width: 0;
     box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+    padding: 1rem;
 }
 
 #weather-chart {
@@ -105,6 +160,10 @@ button:active {
 .current-header > img {
     margin-right: -1.8rem;
 }
+
+.today-info {
+    margin-top: 4rem;
+}
 .today-info > p {
     display: flex;
     justify-content: space-between;
@@ -119,20 +178,19 @@ button:active {
     margin-top: 2rem;
 }
 
-.card {
+.day-card {
     min-width: 10rem;
-    padding: 1rem;
-    box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
-    flex-grow: 1;
+    padding: 1rem; 
+    flex-grow: 1;  
 }
 
-.card-title-container {
+.day-card-title-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.card-title-container h3, .card-title-container p {
+.day-card-title-container h3, .day-card-title-container p {
     margin: 0;
 }
 
@@ -140,10 +198,7 @@ button:active {
     text-align: center;
 }
 
-.card p {
-    display: flex;
-    justify-content: space-between;
-}
+
 
 /*helper styles*/
 .hidden {
