@@ -59,6 +59,6 @@ A modal that explains to the user how to use the app. This also points out the l
 
 ## Links
 
-[Live Website](https://mattyd96.github.io/work-day-scheduler/)  
+[Live Website](https://mattyd96.github.io/weather-dashboard/)  
 
 [My Github Account](https://github.com/mattyd96)
