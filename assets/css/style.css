@@ -317,6 +317,10 @@ main {
     .today-card{
         flex-basis: 100%;  
     }
+
+    .chart {
+        min-height: 20rem;
+    }
 }
 
 
