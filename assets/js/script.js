@@ -56,6 +56,7 @@ const getWeather = (name = place.name, lat = place.geometry.location.lat(), lng 
             }
         })
         .then(info => {
+            console.log(info);
             //populate with info
             populatePage(name, info);
             createChart(info.hourly);
@@ -102,10 +103,16 @@ const populateToday = (name, info) => {
     selectedCity.innerText = name;
     dateToday.innerText = dayjs.unix(info.dt).format('MMMM DD');
     condToday.innerHTML = `<span>Condition</span><span>${info.weather[0].description}</span>`;
-    tempToday.innerHTML = `<span>Temp</span><span>${info.temp}&#8451;</span>`;
+    tempToday.innerHTML = `<span>Temp</span><span>${info.temp} &#8451;</span>`;
     windToday.innerHTML = `<span>Wind</span><span>${info.wind_speed} m/s</span>`;
     humidityToday.innerHTML = `<span>Humidity</span><span>${info.humidity} %</span>`;
-    uvToday.innerHTML = `<span>UV</span><span>${info.uvi} %</span>`;
+    uvToday.innerHTML = `<span>UV</span><span id="uvi">${info.uvi}</span>`;
+    //set danger color for uv index
+    const uvStatus = document.querySelector('#uvi');
+    info.uvi < 2 ? uvStatus.className = "safe" :
+    info.uvi < 5 ? uvStatus.className = "moderate" :
+    info.uvi < 7 ? uvStatus.className = "high" :
+    uvStatus.className = "danger";
 
     statusPic.setAttribute('src', `http://openweathermap.org/img/wn/${info.weather[0].icon}@2x.png`);
     statusPic.setAttribute('alt', `${info.weather[0].description}`);
