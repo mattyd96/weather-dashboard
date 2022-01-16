@@ -139,7 +139,7 @@ const populateToday = (name, info) => {
 </article> */
 
 const populateDaily = info => {
-    let temp_min, temp_max, desc, date, icon;
+    let temp_min, temp_max, desc, wind_speed, humid, date, icon;
     const fragment = new DocumentFragment();
     
     for(let i = 0; i < 5; i++) {
@@ -147,6 +147,8 @@ const populateDaily = info => {
         temp_min = info[i].temp.min;
         temp_max = info[i].temp.max;
         desc = info[i].weather[0].description;
+        wind_speed = info[i].wind_speed;
+        humid = info[i].humidity;
         date = info[i].dt;
         icon = info[i].weather[0].icon;
 
@@ -184,17 +186,23 @@ const populateDaily = info => {
         const weatherDesc = document.createElement('p');
         const tempMax = document.createElement('p');
         const tempMin = document.createElement('p');
+        const wind = document.createElement('p');
+        const humidity = document.createElement('p');
         infoCont.className = "day-card-info";
         weatherDesc.className = 'weather-desc';
         tempMax.className = 'temp-max';
         tempMin.className = 'temp-min';
+        wind.className = 'wind-speed';
+        humidity.className = 'humidity';
         weatherDesc.innerHTML = `<span>Cond:</span><span>${desc}</span>`;
-        tempMax.innerHTML = `<span>High:</span><span>${temp_max}&#8451;</span>`;
-        tempMin.innerHTML = `<span>Low:</span><span>${temp_min}&#8451;</span>`;
+        tempMax.innerHTML = `<span>High:</span><span>${temp_max} &#8451;</span>`;
+        tempMin.innerHTML = `<span>Low:</span><span>${temp_min} &#8451;</span>`;
+        wind.innerHTML = `<span>Wind:</span><span>${wind_speed} m/s</span>`;
+        humidity.innerHTML = `<span>Humidity:</span><span>${humid}%</span>`;
 
         //append together and assemble card
         picContainer.append(pic);
-        infoCont.append(weatherDesc, tempMax, tempMin);
+        infoCont.append(weatherDesc, tempMax, tempMin, wind, humidity);
         titleContainer.append(title, subTitle);
         card.append(titleContainer, picContainer, infoCont);
 
