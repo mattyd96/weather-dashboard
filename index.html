@@ -71,6 +71,37 @@
         
     </main>
 
+    <!-- Modal -->
+    <button id="modal-btn">How to Use</button>
+    <div class="modal-container hidden">
+        <article class="modal card">
+            <section class="modal-header">
+                <h2>How to use</h2>
+                <button id="close-modal">
+                    <svg>
+                        <use xlink:href="#close-icon"></use>
+                    </svg>
+                </button>
+                
+            </section>
+            <section class="modal-content">
+                <h3>Searching</h3>
+                <p>Enter a city into the Search bar</p>
+                <p>
+                    When entering please select your desired city from the drop down menu, if you don't
+                    we wont be able to tell which exact city you want :)
+                </p>
+                <h3>Quick Access</h3>
+                <p>
+                    Your 10 most recent searched cities will be saved next to the search bar. Click
+                    on those for a quicker search.
+                </p>
+                <h3>Dark and Light theme</h3>
+                <p>White to bright? Change the theme! Just click on the icon in the top right corner</p>
+            </section>
+        </article>
+    </div>
+
     <!-- svg elements -->
     <svg>
         <symbol id="moon" viewBox="0 0 24 24" fill="none"
@@ -89,6 +120,16 @@
             <line x1="21" y1="12" x2="23" y2="12"></line>
             <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
             <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </symbol>
+        <symbol id="close-icon" fill="currentColor" style="enable-background:new 0 0 24 24;" version="1.1" viewBox="0 0 24 24">
+            <g id="info" />
+            <g id="icons">
+                <path
+                    d="M14.8,12l3.6-3.6c0.8-0.8,0.8-2,0-2.8c-0.8-0.8-2-0.8-2.8,0L12,9.2L8.4,5.6c-0.8-0.8-2-0.8-2.8,0   
+                    c-0.8,0.8-0.8,2,0,2.8L9.2,12l-3.6,3.6c-0.8,0.8-0.8,2,0,2.8C6,18.8,6.5,19,7,19s1-0.2,1.4-0.6l3.6-3.6l3.6,3.6   
+                    C16,18.8,16.5,19,17,19s1-0.2,1.4-0.6c0.8-0.8,0.8-2,0-2.8L14.8,12z"
+                    id="exit" />
+            </g>
         </symbol>
     </svg>
 

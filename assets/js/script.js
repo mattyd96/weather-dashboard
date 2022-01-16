@@ -39,6 +39,11 @@ let weatherChart = null;
 const themeToggleBtn = document.querySelector('.dark-toggle > svg');
 const toggleIcon = document.querySelector('#toggleIcon');
 
+//modal variables
+const modal = document.querySelector('.modal-container');
+const modalOpenBtn = document.querySelector('#modal-btn');
+const modalCloseBtn = document.querySelector('#close-modal');
+
 
 
 //-------------------------------------------- Page Population : putting data into page ------------------------------//
@@ -356,8 +361,25 @@ const setThemeLight = () => {
     }
 }
 
+//------------------------------------- Modal -----------------------------------------------------------------------//
 
+const openModal = (event) => {
+    modal.classList.remove('hidden');
+}
 
+const closeModal = event => {
+    modal.classList.add('hidden');
+}
+
+const toggleModal = event => {
+    if(event.target.tagName === 'DIV') {
+        closeModal();
+    }
+}
+
+modalOpenBtn.addEventListener('click', openModal);
+modalCloseBtn.addEventListener('click', closeModal);
+modal.addEventListener('click', toggleModal);
 
 
 //------------------------------------- chart code : chart.js -------------------------------------------------------//

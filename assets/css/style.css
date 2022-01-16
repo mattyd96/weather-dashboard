@@ -17,6 +17,11 @@
     --txt-dark: white;
     --txt-light: black;
 
+    --modal-btn-bg: hsla(206, 88%, 55%, 1);
+    --modal-btn-txt: white;
+    --modal-btn-hvr-bg: rgb(81, 173, 243);
+    --modal-btn-hvr-txt: white;
+
     --background-color: var(--bg-color-light);
     --card-color: var(--color-light);
     --txt-color: var(--txt-light);
@@ -231,6 +236,64 @@ main {
 
 .day-pic-container {
     text-align: center;
+}
+
+/* modal */
+#modal-btn {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background-color: var(--modal-btn-bg);
+    color: var(--modal-btn-hvr-txt);
+}
+
+#modal-btn:hover {
+    background-color: var(--modal-btn-hvr-bg);
+    color: var(--modal-btn-hvr-txt);
+}
+
+.modal-container {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color:hsla(220, 10%, 28%, 0.7);
+}
+
+.modal {
+    position: absolute;
+    top: 50%;
+    right: 50%;
+    transform: translate(50%, -50%);
+    width: min(84%, 30rem);
+    margin: auto;
+    padding: 1.5rem;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-content > h3 {
+    margin-top: 2.5rem;
+}
+
+#close-modal {
+    padding: 0;
+    background-color: transparent;
+    color: var(--txt-color);
+}
+
+#close-modal > svg {
+    width: 2.5rem;
+    height: 2.5rem;   
+}
+
+#close-modal:hover {
+    color: var(--button-hvr-bg);
 }
 
 
