@@ -31,7 +31,7 @@ THEN I am again presented with current and future conditions for that city
 
 ## Screenshot
 
-![Demo GIF]()
+![Demo GIF](./assets/demo/demo.gif)
 
 ## Notes
 
