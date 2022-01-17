@@ -35,8 +35,16 @@ THEN I am again presented with current and future conditions for that city
 
 ## Notes
 
-### Functionality limitations
-At the moment this is set to work with google's autocomplete API. The limitation of this is that a user has to select a location from the drop down, for a proper response to come from the API. The alternative is to googles place Search which would return an array of locations based on an arbitrary string. However, I found this to be too vague when searching for specific cities, where there might be two locations and no way to tell which one the user wants. For this reason, I kept the autocomplete version as it forces the user to give a valid search input.
+### Branches
+
+When I first wrote this app I used the google places API to get a location object which was then used to grab information from the openWeatherMap API. However there is a search by city feature available in openWeatherMap API, that satisfies the assignment criteria better.
+<br/>
+
+The google-places-api branch utilizes the google places api to find cities. The limitation of this is that a user has to select a location from the drop down, for a proper response to come from the openWeatherMap API. The alternative for google APIs is to googles place Search which would return an array of locations based on an arbitrary string. However, I found this to be too vague when searching for specific cities, where there might be two locations and no way to tell which one the user wants. For this reason, I kept the autocomplete version as it forces the user to give a valid search input.
+
+<br/>
+
+The main branch utilizes the openWeatherMap API. This one is convenient as it will allow the user to just type in a city and search. The user can also enter a country code as defined [here](https://www.iso.org/obp/ui/#search) to narrow down which city they would like to select. The user input for this needs to be comma separated ex. London, UK/ London,uk to work.
 
 ### Additional Features
 

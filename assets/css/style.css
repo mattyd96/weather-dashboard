@@ -281,6 +281,10 @@ main {
     margin-top: 2.5rem;
 }
 
+.modal-content > p {
+    display: block;
+}
+
 #close-modal {
     padding: 0;
     background-color: transparent;

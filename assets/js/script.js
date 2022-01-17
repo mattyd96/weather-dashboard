@@ -68,8 +68,14 @@ const getWeather = (name, lat, lng) => {
 };
 
 //prepare data for longitude and latitude api call when city is entered
-const citySearch = name => {
-    const url = `https://api.openweathermap.org/data/2.5/weather?q=${name}&appid=cf0f236d99f05f78766736970398dfe2`;
+const citySearch = (name, country = null) => {
+    let url;
+    if(country) {
+        console.log('using country');
+        url= `https://api.openweathermap.org/data/2.5/weather?q=${name},${country}&appid=cf0f236d99f05f78766736970398dfe2`
+    } else {
+        url = `https://api.openweathermap.org/data/2.5/weather?q=${name}&appid=cf0f236d99f05f78766736970398dfe2`;
+    }
 
     return fetch(url).then(response => {
         if(response.ok) {
@@ -268,7 +274,13 @@ const cityBtnClickHandler = event => {
 //updates current place object with google api when user presses search -> gets weather
 const searchHandler = event => {
     event.preventDefault();
-    citySearch(input.value);
+    const inputs = input.value.split(',');
+    if(inputs.length === 1) {
+        citySearch(input.value);
+    } else {
+        citySearch(inputs[0], inputs[1]);
+    }
+    
     
 }
 
