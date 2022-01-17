@@ -21,16 +21,9 @@ const statusPic = document.querySelector('.weather-pic');
 const forcast = document.querySelector('.forcast');
 
 //variables for search and city buttons
-const searchForm = document.querySelector('#search-form');
+const searchForm = document.querySelector('.search');
 const searchBtn = document.querySelector('#search-btn');
 const recentCities = document.querySelector('.recent-cities');
-
-//variables to hold place information from google places api
-const options = {
-    types: ['(cities)']
-};
-const autocomplete = new google.maps.places.Autocomplete(input , options);
-let place; // holds autocomplete.getPlace()
 
 //weather chart variable -> holds chart object when created
 let weatherChart = null;
@@ -49,19 +42,16 @@ const modalCloseBtn = document.querySelector('#close-modal');
 //-------------------------------------------- Page Population : putting data into page ------------------------------//
 
 //get weather from api and update page
-const getWeather = (name = place.name, lat = place.geometry.location.lat(), lng = place.geometry.location.lng()) => {
+const getWeather = (name, lat, lng) => {
+    const url = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lng}&units=metric&exclude=minutely&appid=cf0f236d99f05f78766736970398dfe2`;
     
-    fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lng}&units=metric&exclude=minutely&appid=cf0f236d99f05f78766736970398dfe2`)
+    fetch(url)
         .then(response => {
             if(response.ok) { 
-                return response.json()
-            } else {
-                 apiFetchErrHandler();
-                 return;
+                return response.json();
             }
         })
         .then(info => {
-            console.log(info);
             //populate with info
             populatePage(name, info);
             createChart(info.hourly);
@@ -72,11 +62,45 @@ const getWeather = (name = place.name, lat = place.geometry.location.lat(), lng 
             //clear input
             input.value = "";
 
+        }).catch(() => {
+            apiFetchErrHandler();
         })
 };
 
+//prepare data for longitude and latitude api call when city is entered
+const citySearch = name => {
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${name}&appid=cf0f236d99f05f78766736970398dfe2`;
+
+    return fetch(url).then(response => {
+        if(response.ok) {
+            //remove any error statuses that may be present
+            input.classList.remove('input-error');
+            input.placeholder = 'Enter a city!';
+            
+            //get data
+            return response.json();
+        }
+    }).then(info => {
+        //save name, longitude, and latitude from response
+        name = info.name;
+        console.log(name);
+        const lat = info.coord.lat;
+        const lng = info.coord.lon;
+
+        return [name, lat, lng];
+    }).then(info => {
+        //search using longitude and latitude to get the full response from openWeatherMap API
+        getWeather(info[0], info[1], info[2]);
+    }).catch(() => {
+        apiFetchErrHandler();
+    })
+}
+
 const apiFetchErrHandler = () => {
-    //do something to show user here
+    //show user that city can not be found
+    input.placeholder = 'could not find';
+    input.value = "";
+    input.classList.add('input-error'); 
 };
 
 //Initialize page based on what user had searched last
@@ -244,8 +268,8 @@ const cityBtnClickHandler = event => {
 //updates current place object with google api when user presses search -> gets weather
 const searchHandler = event => {
     event.preventDefault();
-    place = autocomplete.getPlace();
-    if(place) {getWeather();}
+    citySearch(input.value);
+    
 }
 
 //saving new city to local storage
@@ -256,7 +280,7 @@ const localStorageSave = (city, lat_in, lng_in) => {
     let newCity;
 
     //see if city already exists
-    const exists = cities.findIndex(element => element.name == city);
+    const exists = cities.findIndex(element => element.name.toLowerCase() == city.toLowerCase());
 
     if(exists >= 0) {
         newCity = cities.splice(exists, 1)[0];
@@ -517,11 +541,7 @@ window.addEventListener('resize', beforePrintHandler);
 const init = () => {
     pageInitialize();
     recentCities.addEventListener('click', cityBtnClickHandler);
-    searchBtn.addEventListener('click', searchHandler);
-    autocomplete.addListener("place_changed", () => {
-        place = autocomplete.getPlace();
-    });
-
+    searchForm.addEventListener('submit', searchHandler);
     themeToggleBtn.addEventListener('click', toggleThemes);
     setTheme();
 }

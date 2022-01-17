@@ -328,3 +328,8 @@ main {
 .hidden {
     display: none;
 }
+
+.input-error {
+    border: .2rem solid red;
+    border-radius: .25rem;
+}

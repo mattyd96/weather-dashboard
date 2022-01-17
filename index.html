@@ -20,10 +20,10 @@
 
         <!-- Search Section -->
         <section class="city-container">
-            <div class="search">
-                <input type="text" name="city-search" id="city-search">
-                <button id="search-btn">Search</button>
-            </div>
+            <form class="search">
+                <input type="text" name="city-search" id="city-search" placeholder="Enter a city!">
+                <button type="submit" id="search-btn">Search</button>
+            </form>
             <div class="recent-cities">
                 <!-- most recent city buttons go here -->
             </div>
@@ -88,8 +88,7 @@
                 <h3>Searching</h3>
                 <p>Enter a city into the Search bar</p>
                 <p>
-                    When entering please select your desired city from the drop down menu, if you don't
-                    we wont be able to tell which exact city you want :)
+                    When entering please just use a city name, otherwise we wont be able to find it :)
                 </p>
                 <h3>Quick Access</h3>
                 <p>
@@ -134,7 +133,6 @@
     </svg>
 
     <!-- Scripts -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB_PaTfBNe2_W_s2wYXm0J-8Z93qZkKQuM&libraries=places"></script>
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1.10.7/dayjs.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
     <script src="./assets/js/script.js"></script> 
