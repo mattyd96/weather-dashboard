@@ -177,7 +177,7 @@ const populateDaily = info => {
     let temp_min, temp_max, desc, wind_speed, humid, date, icon;
     const fragment = new DocumentFragment();
     
-    for(let i = 0; i < 5; i++) {
+    for(let i = 1; i < 6; i++) {
         //get info
         temp_min = info[i].temp.min;
         temp_max = info[i].temp.max;
