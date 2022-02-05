@@ -1,4 +1,4 @@
-# Weather Dashboard
+# Weather Dashboard [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A weather dashboard that can take in a city search using google's places [autocomplete API](https://developers.google.com/maps/documentation/javascript/places-autocomplete) to get weather data from open weather's [one call API](https://openweathermap.org/api/one-call-api). Data visualization is handled by [chart.js](https://www.chartjs.org/). This has been created for a bootcamp assignment to satisfy the following user story and acceptance citeria.
 
@@ -56,6 +56,12 @@ Functionality allowing a user to select a light or dark theme, which is then sav
 **Instruction Modal**
 <br/>
 A modal that explains to the user how to use the app. This also points out the limitation of the search bar, so that the user knows the proper way to search for a location.
+<br/><br/>
+
+## License
+
+MIT
+<br/>
 
 ## Links
 
